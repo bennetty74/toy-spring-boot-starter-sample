@@ -1,6 +1,12 @@
 
 # 本文介绍
 
+我们都知道Spring Boot项目由一个个的starter构成，比如web的starter，redis的starter等等。
+我们通过maven引入对应的starter，几乎无须配置就可以完美使用集成的spring mvc或redis.
+
+**那么我们如何自定义一个starter呢？**
+
+
 本文用将示如何使用SpringBoot的Auto-Configuration特性创建自己的**Spring Boot Starter**。
 
 
