@@ -40,7 +40,7 @@
 
 ```java
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.bugkit.toy.autoconfigure.ToyAutoConfiguration
+        cn.bugkit.toy.autoconfigure.ToyAutoConfiguration
 ```
 
 
@@ -255,6 +255,8 @@ Process finished with exit code 0
 
 - `toy-sample-app`：在需要用到的starter的地方引入starter的maven依赖，从而可以使用`Toy`对应的Spring Bean
 
-> 剩余代码可以查看仓库源码，这里不再赘述。
+# 可选
+
+> 剩余代码可以查看Github仓库源码，这里不再赘述。
 
 代码地址：https://github.com/bennetty74/toy-spring-boot-starter-sample
