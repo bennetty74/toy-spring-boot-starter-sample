@@ -1,6 +1,22 @@
-# 项目介绍
 
-该项目用于演示如何使用SpringBoot的Auto-Configuration特性创建spring boot starter。
+# 本文介绍
+
+本文用将示如何使用SpringBoot的Auto-Configuration特性创建自己的**Spring Boot Starter**。
+
+
+
+假设`Toy`为我们需要集成为starter框架或者类，并且希望在应用启动的时候就加载到Spring上下文中供我们调用。
+
+**有的小伙伴可能会问为什么要这样做？直接将Toy声明为Spring的bean不就好了。**
+
+答案肯定是可以这样做，不过秉承Spring Boot快速上手的原则，通过引入starter的方式可以更加快速使用集成的我们想要的功能或者特性，就好比上面的`Toy`。
+
+又比如mybatis，因为我们无法修改mybatis源码，途径之一是通过`@Bean`的方式在方法上创建`SqlSessionFactory` bean，并在Spring Boot应用中使用。
+
+途径二则是通过创建starter，需要用到mybatis的地方引入mybatis的starter就可完成mybatis的集成。
+
+**在很多项目需要集成mybatis的情况下，starter的方式会更为快速高效。**
+
 
 # 项目结构
 
@@ -8,30 +24,17 @@
 
 `toy-sample-app` 和`toy-spring-boot-starter`
 
-* toy-sample-app: 演示如何引入自己创建的starter
+* **toy-sample-app**: 演示如何引入自己创建的starter
 
-- toy-spring-boot-starter: starter模块，用于构建`Toy` spring bean 供演示项目使用
+- **toy-spring-boot-starter**: starter模块，用于构建`Toy` Spring Bean 供演示项目使用
 
-# 项目说明
-
-本项目将设`Toy`为我们需要集成为starter的spring bean，并且希望在应用启动的时候就加载到spring上下文中供我们调用。
-
-有的小伙伴可能会问为什么要这样做？直接将Toy声明为Spring的bean不就好了。
-
-答案肯定是可以这样做，不过秉承Spring Boot快速上手的原则，通过引入starter的方式可以更加快速使用集成的我们想要的功能或者特性，就好比上面的`Toy`
-
-又比如mybatis，因为我们无法修改mybatis源码，途径之一是通过`@Bean`的方式在方法上创建`SqlSessionFactory` bean并在Spring Boot应用中使用。
-
-途径二则是通过创建starter，需要用到mybatis的地方引入mybatis的starter就可完成mybatis的集成。
-
-在很多项目需要集成mybatis的情况下，starter的方式会更为快速高效。
 
 # 代码介绍
 
 
 ## toy-spring-boot-starter
 
-- META-INF/spring.factories文件
+- **META-INF/spring.factories文件**
 
 该文件指明了自动注入的的类名，Spring Boot应用启动的时候会将该类初始化并加载到上下文中。
 
@@ -41,11 +44,11 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 ```
 
 
-- ToyAutoConfiguration文件
+- **ToyAutoConfiguration文件**
 
-@Configuration注解说明是Spring的配置类
+**@Configuration注解说明是Spring的配置类**
 
-@EnableConfigurationProperties(ToyProperties.class)注解指定了需要使用的属性配置类
+**@EnableConfigurationProperties(ToyProperties.class)注解指定了需要使用的属性配置类**
 
 ```java
 package cn.bugkit.toy.autoconfigure;
@@ -119,7 +122,7 @@ public class ToyProperties {
 ```
 
 
-- Toy文件
+- **Toy文件**
 
 提供了我们需要的`showInfo()`方法，具体在`toy-sample-app`项目中用到
 
@@ -171,9 +174,9 @@ public class Toy {
 
 该项目用于演示如何使用我们自己构建的toy-spring-boot-starter
 
-- pom文件
+- **pom文件**
 
-pom文件引入上述项目的jar
+pom文件引入starter项目的jar
 
 ```xml
  <dependency>
@@ -183,9 +186,9 @@ pom文件引入上述项目的jar
 </dependency>
 ```
 
-- ToyService文件
+- **ToyService文件**
 
-该类注入starter项目的Toy bean，并在ToyService初始化完成后调用Toy的showInfo()方法
+该类注入starter项目的`Toy` bean，并在ToyService初始化完成后调用`Toy`的`showInfo()`方法
 
 ```java
 package cn.bugkit.toy.app.service;
@@ -215,4 +218,43 @@ public class ToyService {
 
 ```
 
+- **application.properties文件**
+
+该文件的key(如`toy.name`)对应starter项目的`ToyProperties`类。
+
+```properties
+toy.name=Hello Kitty
+toy.password=kitty@1234
+toy.weight=99
+```
+
+
+- **控制台启动日志**
+```
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.3)
+
+2022-02-24 14:53:24.092  INFO 14652 --- [           main] c.bugkit.toy.app.StarterDemoApplication  : Starting StarterDemoApplication using Java 1.8.0_211 on Bennetty74 with PID 14652 (E:\ideaProjects\spring-learning\toy-sample-app\target\classes started by Bennetty74 in E:\ideaProjects\spring-learning)
+2022-02-24 14:53:24.092  INFO 14652 --- [           main] c.bugkit.toy.app.StarterDemoApplication  : No active profile set, falling back to default profiles: default
+===================start==========================
+Toy [ Name: Hello Kitty, password: kitty@1234, weight: 99 ]
+===================end============================
+2022-02-24 14:53:24.608  INFO 14652 --- [           main] c.bugkit.toy.app.StarterDemoApplication  : Started StarterDemoApplication in 0.888 seconds (JVM running for 1.836)
+
+Process finished with exit code 0
+```
+
+# 总结
+
+- `toy-spring-boot-starter`： 我们通过Spring Boot 的Auto-Configuration特性集成`Toy`
+
+- `toy-sample-app`：在需要用到的starter的地方引入starter的maven依赖，从而可以使用`Toy`对应的Spring Bean
+
 > 剩余代码可以查看仓库源码，这里不再赘述。
+
+代码地址：https://github.com/bennetty74/toy-spring-boot-starter-sample
